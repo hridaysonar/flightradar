@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import TurCard from './TurCard';
 import rocket from '../assets/Rock it!.gif'
 import { Helmet } from 'react-helmet';
+import { Atom } from 'lucide-react';
+import { Mosaic } from 'react-loading-indicators';
 const AllPakej = () => {
   const [packages, setPackages] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -60,7 +62,7 @@ const AllPakej = () => {
 
     {/* 📝 Loading Text */}
     <p className="text-lg font-semibold text-indigo-600 dark:text-indigo-300">
-      Loading packages...
+      
     </p>
   </div>
 )
