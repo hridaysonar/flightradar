@@ -165,7 +165,7 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'py-2' : 'py-4'}`}>
-      <div className={`w-[95%] mx-auto flex justify-between items-center rounded-2xl px-6 backdrop-blur-xl relative overflow-visible transition-all duration-300 ${
+      <div className={`w-full mx-auto flex justify-between items-center rounded-2xl px-4 backdrop-blur-xl relative overflow-visible transition-all duration-300 ${
         isScrolled 
           ? 'bg-white/90 dark:bg-gray-900/90 shadow-lg border border-gray-200/20 py-3' 
           : 'bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-cyan-400/20 border border-white/20 py-6'
