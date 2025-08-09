@@ -5,6 +5,7 @@ import { MapPin, Calendar, Clock, Users, Star, Heart, Share2, Camera, CheckCircl
 import Swal from 'sweetalert2';
 import { Helmet } from 'react-helmet';
 
+// text 
 const TurDeltes = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
