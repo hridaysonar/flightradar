@@ -2,19 +2,20 @@ import React, { useContext, useEffect, useState } from 'react';
 import { MdDelete } from "react-icons/md";
 import { AuthContext } from '../context/AuthProveider';
 import { Helmet } from 'react-helmet';
+import Swal from 'sweetalert2';  
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const { user } = useContext(AuthContext);
 
-  // ✅ Initialize dark mode from localStorage
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('darkMode') === 'true';
   });
 
   useEffect(() => {
+    if (!user?.email) return;
     fetchBookings();
-  }, []);
+  }, [user?.email]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -26,9 +27,23 @@ const MyBookings = () => {
     localStorage.setItem('darkMode', isDarkMode);
   }, [isDarkMode]);
 
+  // Listen for changes to 'darkMode' from other tabs/components
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === 'darkMode') {
+        setIsDarkMode(event.newValue === 'true');
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   const fetchBookings = () => {
-    if (!user?.email) return;
-    fetch(`https://tour-backend-five.vercel.app/api/v1/tour-booking?email=${user.email}`) 
+    fetch(`https://tour-backend-five.vercel.app/api/v1/tour-booking?email=${user.email}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch bookings');
         return res.json();
@@ -38,21 +53,38 @@ const MyBookings = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this booking?')) return;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+    });
 
-    try {
-      const res = await fetch(`https://tour-backend-five.vercel.app/api/v1/tour-booking/${id}`, {
-        method: 'DELETE',
-      });
+    if (result.isConfirmed) {
+      try {
+        const res = await fetch(`https://tour-backend-five.vercel.app/api/v1/tour-booking/${id}`, {
+          method: 'DELETE',
+        });
 
-      if (res.ok) {
-        setBookings(prev => prev.filter((booking) => booking._id !== id));
-      } else {
-        alert('Failed to delete booking');
+        if (res.ok) {
+          setBookings(prev => prev.filter((booking) => booking._id !== id));
+
+          Swal.fire(
+            'Deleted!',
+            'Your booking has been deleted.',
+            'success'
+          );
+        } else {
+          Swal.fire('Failed!', 'Failed to delete booking.', 'error');
+        }
+      } catch (err) {
+        console.error('Error deleting booking:', err);
+        Swal.fire('Error!', 'An error occurred while deleting.', 'error');
       }
-    } catch (err) {
-      console.error('Error deleting booking:', err);
-      alert('An error occurred while deleting');
     }
   };
 
@@ -61,16 +93,6 @@ const MyBookings = () => {
       <Helmet>
         <title>My Booking</title>
       </Helmet>
-
-      {/* ✅ Toggle Button */}
-      <div className="flex justify-end mb-4">
-        {/* <button
-          onClick={() => setIsDarkMode(prev => !prev)}
-          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-yellow-500 dark:hover:bg-yellow-600 transition"
-        >
-          {isDarkMode ? 'Light Mode ☀️' : 'Dark Mode 🌙'}
-        </button> */}
-      </div>
 
       <h1 className="text-3xl font-bold text-center mb-2 overflow-hidden shadow-lg bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
         My <span className="text-purple-600 dark:text-purple-400">Bookings</span>
