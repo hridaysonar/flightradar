@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router'; 
+import { Link } from 'react-router';
 
 const TurCard = ({ data }) => {
   const {
@@ -46,13 +46,13 @@ const TurCard = ({ data }) => {
   };
 
   return (
-    <div className="group">
+    <div className="group max-w-sm mx-auto">
       <div className="rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 
                       transform transition-all duration-700 ease-in-out
                       hover:shadow-2xl hover:scale-105 hover:-translate-y-2
                       group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-blue-50 
                       dark:group-hover:from-gray-900 dark:group-hover:to-gray-800">
-        
+
         {/* Image with overlay animation */}
         <div className="relative overflow-hidden">
           <img 
@@ -63,8 +63,8 @@ const TurCard = ({ data }) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent 
                           opacity-0 group-hover:opacity-100 transition-opacity duration-800"></div>
-          
-          {/* Price badge with animation */}
+
+          {/* Price badge */}
           <div className="absolute top-4 right-4 transform translate-x-full opacity-0 
                           group-hover:translate-x-0 group-hover:opacity-100 
                           transition-all duration-800 delay-300">
@@ -75,14 +75,14 @@ const TurCard = ({ data }) => {
         </div>
 
         <div className="p-6 space-y-3">
-          {/* Title with animation */}
+          {/* Title */}
           <h2 className="text-2xl font-semibold text-blue-700 dark:text-blue-400 
                          transform transition-all duration-500 
                          group-hover:text-blue-600 group-hover:scale-105">
             {tourName}
           </h2>
 
-          {/* Tags with stagger animation */}
+          {/* Tags */}
           <div className="flex flex-wrap gap-2 text-sm text-gray-600 dark:text-gray-300">
             <span className="bg-blue-100 dark:bg-blue-800 px-2 py-1 rounded-full 
                            transform transition-all duration-500 delay-200
@@ -106,7 +106,7 @@ const TurCard = ({ data }) => {
             </span>
           </div>
 
-          {/* Package details with slide animation */}
+          {/* Package details */}
           <div className="transform transition-all duration-600 group-hover:translate-x-2">
             <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
               {packageDetails}
@@ -116,7 +116,7 @@ const TurCard = ({ data }) => {
             </p>
           </div>
 
-          {/* Like section with pulse animation */}
+          {/* Like button */}
           <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
             <span className="text-sm transform transition-all duration-500 group-hover:scale-110">
               ❤️ {likes} likes
@@ -135,7 +135,7 @@ const TurCard = ({ data }) => {
             </button>
           </div>
 
-          {/* View Details button with enhanced animation */}
+          {/* View Details */}
           <Link
             to={`/tour-details/${_id}`}
             className="block mt-4 text-center bg-gradient-to-r from-indigo-600 to-purple-600 

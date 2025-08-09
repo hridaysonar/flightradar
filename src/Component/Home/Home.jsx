@@ -11,7 +11,6 @@ import AwardsBadges from '../Slider/AwardsBadges ';
 const Home = () => {
   const tasks = useLoaderData();
 
-  // Initialize darkMode state from localStorage or system preference
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme');
@@ -21,7 +20,6 @@ const Home = () => {
     return false;
   });
 
-  // Apply or remove dark class on html element when darkMode changes
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -32,9 +30,7 @@ const Home = () => {
     }
   }, [darkMode]);
 
-  // Toggle handler for the button
-  // const toggleDarkMode = () => setDarkMode(prev => !prev);
-
+  
   return (
     <div className="min-h-screen transition-colors duration-500 bg-white dark:bg-black text-black dark:text-white">
       <Helmet>
@@ -43,12 +39,7 @@ const Home = () => {
 
       {/* Dark mode toggle button */}
       <div className="p-4 flex justify-end">
-        {/* <button
-          onClick={toggleDarkMode}
-          className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-        >
-          {darkMode ? 'Light Mode' : 'Dark Mode'}
-        </button> */}
+       
       </div>
 
       <ShareTripBooking />
