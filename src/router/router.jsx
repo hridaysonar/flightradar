@@ -18,6 +18,7 @@ import MyBookings from '../page/MyBookings';
 import MyCreate from '../page/MyCreate';
 import Update from '../page/Update'
 import Register from '../page/Register';
+import Dashbord from '../page/Dashbord';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <AddPak />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: 'dashbord',
+        element: (
+          <PrivateRoute>
+            <Dashbord/>
           </PrivateRoute>
         ),
       },

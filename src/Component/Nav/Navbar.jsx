@@ -247,6 +247,22 @@ const Navbar = () => {
                Add Package
             </NavLink>
           </li>
+          <li>
+            <NavLink 
+              to="/dashbord" 
+              className={({ isActive }) => `block px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
+                isActive 
+                  ? isScrolled 
+                    ? "bg-blue-600 text-white shadow-lg" 
+                    : "bg-purple-600 text-white shadow-lg"
+                  : isScrolled
+                    ? "hover:bg-gray-100 dark:hover:bg-gray-700"
+                    : "hover:bg-white/20 backdrop-blur-sm"
+              }`}
+            >
+              My Dashbord
+            </NavLink>
+          </li>
           
           <li>
             <NavLink 
