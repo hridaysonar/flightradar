@@ -7,6 +7,7 @@ import AirlineSearch from '../Cuntry/AirlineSearch';
 import TurCard from '../../page/TurCard';
 // import FlySkyFooter from '../Footer/FlySkyFooter';
 import AwardsBadges from '../Slider/AwardsBadges ';
+import ExpediaAppSection from '../../page/ExpediaAppSection';
 
 const Home = () => {
   const tasks = useLoaderData();
@@ -61,7 +62,15 @@ const Home = () => {
 
       <AirlineSearch />
       <MyMarquee />
+      
         <AwardsBadges/>
+        {/* <br />
+        <br />
+        <br />
+        <ExpediaAppSection/>
+        <br />
+        <br />
+        <br /> */}
     </div>
   );
 };

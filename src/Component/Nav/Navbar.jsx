@@ -38,6 +38,7 @@ const ProfileSidebar = ({ user, logOut }) => {
 };
 
 
+
   return (
     <div className="w-80 rounded-lg shadow-lg bg-white overflow-hidden text-gray-800">
       <div className="p-4 border-b border-gray-200">
