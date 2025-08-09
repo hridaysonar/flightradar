@@ -118,10 +118,10 @@ const TurCard = ({ data }) => {
 
           {/* Like button */}
           <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
-            <span className="text-sm transform transition-all duration-500 group-hover:scale-110">
+            {/* <span className="text-sm transform transition-all duration-500 group-hover:scale-110">
               ❤️ {likes} likes
-            </span>
-            <button
+            </span> */}
+            {/* <button
               onClick={handleLike}
               disabled={liked}
               className={`px-4 py-2 rounded-full font-medium transition-all duration-500 transform
@@ -132,7 +132,7 @@ const TurCard = ({ data }) => {
               }`}
             >
               {liked ? '✓ Liked' : '👍 Like'}
-            </button>
+            </button> */}
           </div>
 
           {/* View Details */}

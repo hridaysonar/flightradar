@@ -8,28 +8,26 @@ const MyBookings = () => {
   const { user } = useContext(AuthContext);
 
   // ✅ Initialize dark mode from localStorage
-  const [isDarkMode, _setIsDarkMode] = useState(() => {
-    const stored = localStorage.getItem('darkMode');
-    return stored === 'true'; // stored value is always string
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('darkMode') === 'true';
   });
 
   useEffect(() => {
     fetchBookings();
-  }, [])
+  }, []);
 
   useEffect(() => {
-    const root = window.document.documentElement;
+    const root = document.documentElement;
     if (isDarkMode) {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
-
-    // ✅ Save to localStorage
     localStorage.setItem('darkMode', isDarkMode);
   }, [isDarkMode]);
 
   const fetchBookings = () => {
+    if (!user?.email) return;
     fetch(`https://tour-backend-five.vercel.app/api/v1/tour-booking?email=${user.email}`) 
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch bookings');
@@ -40,8 +38,7 @@ const MyBookings = () => {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this booking?');
-    if (!confirmDelete) return;
+    if (!window.confirm('Are you sure you want to delete this booking?')) return;
 
     try {
       const res = await fetch(`https://tour-backend-five.vercel.app/api/v1/tour-booking/${id}`, {
@@ -49,10 +46,8 @@ const MyBookings = () => {
       });
 
       if (res.ok) {
-        setBookings(bookings.filter((booking) => booking._id !== id));
+        setBookings(prev => prev.filter((booking) => booking._id !== id));
       } else {
-        const errorData = await res.json();
-        console.error('Delete failed:', errorData);
         alert('Failed to delete booking');
       }
     } catch (err) {
@@ -66,10 +61,11 @@ const MyBookings = () => {
       <Helmet>
         <title>My Booking</title>
       </Helmet>
-      {/* Toggle Button */}
+
+      {/* ✅ Toggle Button */}
       <div className="flex justify-end mb-4">
         {/* <button
-          onClick={() => setIsDarkMode(!isDarkMode)}
+          onClick={() => setIsDarkMode(prev => !prev)}
           className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:bg-yellow-500 dark:hover:bg-yellow-600 transition"
         >
           {isDarkMode ? 'Light Mode ☀️' : 'Dark Mode 🌙'}
