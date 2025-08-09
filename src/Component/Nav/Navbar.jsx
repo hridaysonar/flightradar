@@ -231,23 +231,40 @@ const Navbar = () => {
               All Packages
             </NavLink>
           </li>
-          <li>
-            <NavLink 
-              to="/add-pak" 
-              className={({ isActive }) => `block px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
-                isActive 
-                  ? isScrolled 
-                    ? "bg-blue-600 text-white shadow-lg" 
-                    : "bg-purple-600 text-white shadow-lg"
-                  : isScrolled
-                    ? "hover:bg-gray-100 dark:hover:bg-gray-700"
-                    : "hover:bg-white/20 backdrop-blur-sm"
-              }`}
-            >
-               Add Package
-            </NavLink>
-          </li>
-          <li>
+         {user && (
+  <>
+    <li className="mt-2">
+      <NavLink
+        to="/add-pak"
+        className={({ isActive }) =>
+          `px-4 py-2 rounded-full transition ${
+            isActive
+              ? "bg-purple-600 text-white shadow-lg"
+              : "hover:bg-gray-100 dark:hover:bg-gray-700"
+          }`
+        }
+      >
+        Add Package
+      </NavLink>
+    </li>
+    <li className="mt-2">
+      <NavLink
+        to="/dashbord"
+        className={({ isActive }) =>
+          `px-4 py-2 rounded-full transition ${
+            isActive
+              ? "bg-purple-600 text-white shadow-lg"
+              : "hover:bg-gray-100 dark:hover:bg-gray-700"
+          }`
+        }
+      >
+        My Dashboard
+      </NavLink>
+    </li>
+  </>
+)}
+
+          {/* <li>
             <NavLink 
               to="/dashbord" 
               className={({ isActive }) => `block px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
@@ -262,7 +279,7 @@ const Navbar = () => {
             >
               My Dashbord
             </NavLink>
-          </li>
+          </li> */}
           
           <li>
             <NavLink 
