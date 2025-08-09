@@ -8,6 +8,7 @@ const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const { user } = useContext(AuthContext);
 
+  // Load dark mode from localStorage
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('darkMode') === 'true';
   });
@@ -17,6 +18,7 @@ const MyBookings = () => {
     fetchBookings();
   }, [user?.email]);
 
+  // Apply/remove dark class on <html> and save to localStorage
   useEffect(() => {
     const root = document.documentElement;
     if (isDarkMode) {
@@ -27,19 +29,15 @@ const MyBookings = () => {
     localStorage.setItem('darkMode', isDarkMode);
   }, [isDarkMode]);
 
-  // Listen for changes to 'darkMode' from other tabs/components
+  // Listen for darkMode changes from other tabs
   useEffect(() => {
     const handleStorageChange = (event) => {
       if (event.key === 'darkMode') {
         setIsDarkMode(event.newValue === 'true');
       }
     };
-
     window.addEventListener('storage', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const fetchBookings = () => {
@@ -72,12 +70,7 @@ const MyBookings = () => {
 
         if (res.ok) {
           setBookings(prev => prev.filter((booking) => booking._id !== id));
-
-          Swal.fire(
-            'Deleted!',
-            'Your booking has been deleted.',
-            'success'
-          );
+          Swal.fire('Deleted!', 'Your booking has been deleted.', 'success');
         } else {
           Swal.fire('Failed!', 'Failed to delete booking.', 'error');
         }
@@ -93,6 +86,17 @@ const MyBookings = () => {
       <Helmet>
         <title>My Booking</title>
       </Helmet>
+
+      {/* Dark/Light mode toggle */}
+      <div className="flex justify-end mb-4">
+        {/* <button
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className="flex items-center gap-2 px-4 py-2 bg-purple-600 dark:bg-yellow-400 text-white rounded hover:opacity-90 transition"
+          aria-label="Toggle Dark Mode"
+        >
+          {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+        </button> */}
+      </div>
 
       <h1 className="text-3xl font-bold text-center mb-2 overflow-hidden shadow-lg bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
         My <span className="text-purple-600 dark:text-purple-400">Bookings</span>
