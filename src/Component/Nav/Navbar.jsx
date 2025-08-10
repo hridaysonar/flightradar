@@ -12,48 +12,38 @@ const ProfileSidebar = ({ user, logOut }) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    // { id: 'profiles', icon: "👥", text: "See all profiles", isButton: true, className: "bg-gray-200 text-center font-medium py-2" },
-    // { id: 'mycreate', icon: "📦", text: "My Create", action: '/myCreate' },
-  
-    
-   
-    //  { id: 'mybookings', icon: "📅", text: "My Bookings",  },
     { id: 'logout', icon: "📤", text: "Log out" }
   ];
 
   const handleMenuItemClick = (itemId) => {
-  setActiveItem(itemId);
+    setActiveItem(itemId);
 
-  if (itemId === 'logout') {
-    if (typeof logOut === 'function') {
-      logOut().catch(err => console.error("Logout failed:", err));
+    if (itemId === 'logout') {
+      if (typeof logOut === 'function') {
+        logOut().catch(err => console.error("Logout failed:", err));
+      }
+    } else if (itemId === 'profiles') {
+      navigate('/my-profile');
+    } else if (itemId === 'mycreate') {
+      navigate('/myCreate');
+    } else if (itemId === 'mybookings') {
+      navigate('/mybookings');
     }
-  } else if (itemId === 'profiles') {
-    navigate('/my-profile');
-  } else if (itemId === 'mycreate') {
-    navigate('/myCreate');
-  } else if (itemId === 'mybookings') {
-    navigate('/mybookings');
-  }
-};
-
-
+  };
 
   return (
-    <div className="w-80 rounded-lg shadow-lg bg-white overflow-hidden text-gray-800">
-      <div className="p-4 border-b border-gray-200">
+    <div className="w-72 sm:w-80 rounded-lg shadow-lg bg-white overflow-hidden text-gray-800">
+      <div className="p-3 sm:p-4 border-b border-gray-200">
         <div className="flex flex-col items-center text-center space-y-2">
-          <div className="w-16 h-16 rounded-full overflow-hidden">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden">
             <img src={user.photoUrl || user.photoURL} alt="User profile" className="w-full h-full object-cover" />
           </div>
           <div>
-            <h3 className="font-medium text-gray-900">{user.name}</h3>
-            <p className="text-sm text-gray-600">{user.email}</p>
+            <h3 className="font-medium text-gray-900 text-sm sm:text-base">{user.name}</h3>
+            <p className="text-xs sm:text-sm text-gray-600">{user.email}</p>
           </div>
         </div>
       </div>
-
-      
 
       <div className="py-1">
         {menuItems.map((item) => (
@@ -66,9 +56,9 @@ const ProfileSidebar = ({ user, logOut }) => {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <span className="text-gray-500 w-6 text-center">{item.icon}</span>
+                <span className="text-gray-500 w-6 text-center text-sm sm:text-base">{item.icon}</span>
                 <div>
-                  <span className="text-gray-800">{item.text}</span>
+                  <span className="text-gray-800 text-sm sm:text-base">{item.text}</span>
                   {item.subText && (
                     <div className="text-xs text-gray-500">{item.subText}</div>
                   )}
@@ -112,7 +102,6 @@ const Navbar = () => {
 
   const { user, logOut } = useContext(AuthContext);
   const dropdownRef = useRef(null);
-  // const navigate = useNavigate();
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
@@ -164,12 +153,29 @@ const Navbar = () => {
     }
   };
 
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isOpen && !event.target.closest('nav')) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isOpen]);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [window.location.pathname]);
+
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'py-2' : 'py-4'}`}>
-      <div className={`w-full mx-auto flex justify-between items-center rounded-2xl px-4 backdrop-blur-xl relative overflow-visible transition-all duration-300 ${
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 px-4 sm:px-8 lg:px-16 ${isScrolled ? 'py-1' : 'py-1 sm:py-2'}`}>
+      <div className={`max-w-7xl mx-auto flex justify-between items-center rounded-2xl px-3 sm:px-4 lg:px-6 backdrop-blur-xl relative overflow-visible transition-all duration-300 ${
         isScrolled 
-          ? 'bg-white/90 dark:bg-gray-900/90 shadow-lg border border-gray-200/20 py-3' 
-          : 'bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-cyan-400/20 border border-white/20 py-6'
+          ? 'bg-white/90 dark:bg-gray-900/90 shadow-lg border border-gray-200/20 py-2' 
+          : 'bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-cyan-400/20 border border-white/20 py-2 sm:py-4'
       }`}>
         
         {/* Animated Border Beam */}
@@ -188,22 +194,26 @@ const Navbar = () => {
         )}
 
         {/* Logo */}
-        <div className="flex items-center gap-4 z-10">
+        <div className="flex items-center gap-2 sm:gap-4 z-10">
           <img 
-            className={`cursor-pointer transition-all duration-300 ${isScrolled ? 'w-12' : 'w-20'}`} 
+            className={`cursor-pointer transition-all duration-300 ${
+              isScrolled 
+                ? 'w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10' 
+                : 'w-9 h-9 sm:w-12 sm:h-12 lg:w-14 lg:h-14'
+            }`} 
             src={img1} 
             alt="Logo" 
           />
         </div>
 
         {/* Desktop Navigation */}
-        <ul className={`hidden md:flex gap-6 text-lg z-10 transition-all duration-300 ${
+        <ul className={`hidden lg:flex gap-2 xl:gap-4 text-sm xl:text-base z-10 transition-all duration-300 ${
           isScrolled ? 'text-gray-700 dark:text-gray-200' : 'text-white'
         }`}>
           <li>
             <NavLink 
               to="/" 
-              className={({ isActive }) => `block px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
+              className={({ isActive }) => `block px-2 xl:px-3 py-1 rounded-full transition-all duration-300 hover:scale-105 ${
                 isActive 
                   ? isScrolled 
                     ? "bg-blue-600 text-white shadow-lg" 
@@ -219,7 +229,7 @@ const Navbar = () => {
           <li>
             <NavLink 
               to="/allpak" 
-              className={({ isActive }) => `block px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
+              className={({ isActive }) => `block px-2 xl:px-3 py-1 rounded-full transition-all duration-300 hover:scale-105 whitespace-nowrap ${
                 isActive 
                   ? isScrolled 
                     ? "bg-blue-600 text-white shadow-lg" 
@@ -232,60 +242,46 @@ const Navbar = () => {
               All Packages
             </NavLink>
           </li>
-         {user && (
-  <>
-    <li className="mt-2">
-      <NavLink
-        to="/add-pak"
-        className={({ isActive }) =>
-          `px-4 py-2 rounded-full transition ${
-            isActive
-              ? "bg-purple-600 text-white shadow-lg"
-              : "hover:bg-gray-100 dark:hover:bg-gray-700"
-          }`
-        }
-      >
-        Add Package
-      </NavLink>
-    </li>
-    <li className="mt-2">
-      <NavLink
-        to="/dashbord"
-        className={({ isActive }) =>
-          `px-4 py-2 rounded-full transition ${
-            isActive
-              ? "bg-purple-600 text-white shadow-lg"
-              : "hover:bg-gray-100 dark:hover:bg-gray-700"
-          }`
-        }
-      >
-        My Dashboard
-      </NavLink>
-    </li>
-  </>
-)}
-
-          {/* <li>
-            <NavLink 
-              to="/dashbord" 
-              className={({ isActive }) => `block px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
-                isActive 
-                  ? isScrolled 
-                    ? "bg-blue-600 text-white shadow-lg" 
-                    : "bg-purple-600 text-white shadow-lg"
-                  : isScrolled
-                    ? "hover:bg-gray-100 dark:hover:bg-gray-700"
-                    : "hover:bg-white/20 backdrop-blur-sm"
-              }`}
-            >
-              My Dashbord
-            </NavLink>
-          </li> */}
-          
+          {user && (
+            <>
+              <li>
+                <NavLink
+                  to="/add-pak"
+                  className={({ isActive }) => `block px-3 xl:px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 whitespace-nowrap ${
+                    isActive
+                      ? isScrolled 
+                        ? "bg-blue-600 text-white shadow-lg" 
+                        : "bg-purple-600 text-white shadow-lg"
+                      : isScrolled
+                        ? "hover:bg-gray-100 dark:hover:bg-gray-700"
+                        : "hover:bg-white/20 backdrop-blur-sm"
+                  }`}
+                >
+                  Add Package
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashbord"
+                  className={({ isActive }) => `block px-3 xl:px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 whitespace-nowrap ${
+                    isActive
+                      ? isScrolled 
+                        ? "bg-blue-600 text-white shadow-lg" 
+                        : "bg-purple-600 text-white shadow-lg"
+                      : isScrolled
+                        ? "hover:bg-gray-100 dark:hover:bg-gray-700"
+                        : "hover:bg-white/20 backdrop-blur-sm"
+                  }`}
+                >
+                  My Dashboard
+                </NavLink>
+              </li>
+            </>
+          )}
           <li>
             <NavLink 
               to="/Blog" 
-              className={({ isActive }) => `block px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
+              className={({ isActive }) => `block px-3 xl:px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
                 isActive 
                   ? isScrolled 
                     ? "bg-blue-600 text-white shadow-lg" 
@@ -298,25 +294,117 @@ const Navbar = () => {
               About
             </NavLink>
           </li>
-         
+        </ul>
+
+        {/* Tablet Navigation (hidden on mobile and desktop) */}
+        <ul className={`hidden md:flex lg:hidden gap-2 text-sm z-10 transition-all duration-300 ${
+          isScrolled ? 'text-gray-700 dark:text-gray-200' : 'text-white'
+        }`}>
+          <li>
+            <NavLink 
+              to="/" 
+              className={({ isActive }) => `block px-2 py-2 rounded-full transition-all duration-300 ${
+                isActive 
+                  ? isScrolled 
+                    ? "bg-blue-600 text-white shadow-lg" 
+                    : "bg-purple-600 text-white shadow-lg"
+                  : isScrolled
+                    ? "hover:bg-gray-100 dark:hover:bg-gray-700"
+                    : "hover:bg-white/20 backdrop-blur-sm"
+              }`}
+            >
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to="/allpak" 
+              className={({ isActive }) => `block px-2 py-2 rounded-full transition-all duration-300 text-xs ${
+                isActive 
+                  ? isScrolled 
+                    ? "bg-blue-600 text-white shadow-lg" 
+                    : "bg-purple-600 text-white shadow-lg"
+                  : isScrolled
+                    ? "hover:bg-gray-100 dark:hover:bg-gray-700"
+                    : "hover:bg-white/20 backdrop-blur-sm"
+              }`}
+            >
+              Packages
+            </NavLink>
+          </li>
+          {user && (
+            <>
+              <li>
+                <NavLink
+                  to="/add-pak"
+                  className={({ isActive }) => `block px-2 py-2 rounded-full transition-all duration-300 text-xs ${
+                    isActive
+                      ? isScrolled 
+                        ? "bg-blue-600 text-white shadow-lg" 
+                        : "bg-purple-600 text-white shadow-lg"
+                      : isScrolled
+                        ? "hover:bg-gray-100 dark:hover:bg-gray-700"
+                        : "hover:bg-white/20 backdrop-blur-sm"
+                  }`}
+                >
+                  Add
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashbord"
+                  className={({ isActive }) => `block px-2 py-2 rounded-full transition-all duration-300 text-xs ${
+                    isActive
+                      ? isScrolled 
+                        ? "bg-blue-600 text-white shadow-lg" 
+                        : "bg-purple-600 text-white shadow-lg"
+                      : isScrolled
+                        ? "hover:bg-gray-100 dark:hover:bg-gray-700"
+                        : "hover:bg-white/20 backdrop-blur-sm"
+                  }`}
+                >
+                  Dashboard
+                </NavLink>
+              </li>
+            </>
+          )}
+          <li>
+            <NavLink 
+              to="/Blog" 
+              className={({ isActive }) => `block px-2 py-2 rounded-full transition-all duration-300 ${
+                isActive 
+                  ? isScrolled 
+                    ? "bg-blue-600 text-white shadow-lg" 
+                    : "bg-purple-600 text-white shadow-lg"
+                  : isScrolled
+                    ? "hover:bg-gray-100 dark:hover:bg-gray-700"
+                    : "hover:bg-white/20 backdrop-blur-sm"
+              }`}
+            >
+              About
+            </NavLink>
+          </li>
         </ul>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden z-10">
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen(!isOpen);
+            }}
             className={`p-2 rounded-full transition-all duration-300 ${
               isScrolled 
                 ? 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700' 
                 : 'text-white hover:bg-white/20'
             }`}
           >
-            {isOpen ? <AiOutlineClose size={24} /> : <AiOutlineMenu size={24} />}
+            {isOpen ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
           </button>
         </div>
 
         {/* Right Side Actions */}
-        <div className="relative flex gap-4 items-center z-10">
+        <div className="relative flex gap-2 sm:gap-4 items-center z-10">
           <button 
             onClick={toggleDarkMode} 
             className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
@@ -325,7 +413,7 @@ const Navbar = () => {
                 : 'text-white hover:bg-white/20'
             }`}
           >
-            {darkMode ? <AiOutlineSun size={22} /> : <AiOutlineMoon size={22} />}
+            {darkMode ? <AiOutlineSun size={18} className="sm:w-5 sm:h-5" /> : <AiOutlineMoon size={18} className="sm:w-5 sm:h-5" />}
           </button>
 
           {user ? (
@@ -335,8 +423,8 @@ const Navbar = () => {
                 alt="Profile"
                 className={`rounded-full object-cover transition-all duration-300 hover:scale-110 ${
                   isScrolled 
-                    ? 'w-10 h-10 border-2 border-blue-500 hover:ring-2 hover:ring-blue-400' 
-                    : 'w-12 h-12 border-2 border-white hover:ring-2 hover:ring-white/50'
+                    ? 'w-8 h-8 sm:w-10 sm:h-10 border-2 border-blue-500 hover:ring-2 hover:ring-blue-400' 
+                    : 'w-10 h-10 sm:w-12 sm:h-12 border-2 border-white hover:ring-2 hover:ring-white/50'
                 }`}
               />
               <div className={`absolute top-full mt-2 left-1/2 -translate-x-1/2 text-xs px-3 py-1 rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-50 ${
@@ -347,7 +435,7 @@ const Navbar = () => {
                 {user.name}
               </div>
               {dropdownOpen && (
-                <div ref={dropdownRef} className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl overflow-hidden z-50 animate-in slide-in-from-top-2 duration-200">
+                <div ref={dropdownRef} className="absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-lg shadow-xl overflow-hidden z-50 animate-in slide-in-from-top-2 duration-200">
                   <ProfileSidebar user={user} logOut={handleLogout} />
                 </div>
               )}
@@ -355,7 +443,7 @@ const Navbar = () => {
           ) : (
             <NavLink 
               to="/login" 
-              className={`px-6 py-2 rounded-xl font-medium transition-all duration-300 hover:scale-105 ${
+              className={`px-3 sm:px-6 py-2 rounded-xl font-medium transition-all duration-300 hover:scale-105 text-sm sm:text-base ${
                 isScrolled 
                   ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg' 
                   : 'bg-white/20 text-white backdrop-blur-sm hover:bg-white/30'
@@ -369,7 +457,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className={`md:hidden absolute top-full left-0 w-full mt-2 mx-auto px-4 z-40 transition-all duration-300`}>
+        <div className={`md:hidden absolute top-full left-0 w-full mt-2 px-2 sm:px-4 z-40 transition-all duration-300`}>
           <div className={`rounded-2xl backdrop-blur-xl border overflow-hidden ${
             isScrolled 
               ? 'bg-white/95 dark:bg-gray-900/95 border-gray-200/20' 
@@ -380,7 +468,7 @@ const Navbar = () => {
                 <NavLink 
                   to="/" 
                   onClick={() => setIsOpen(false)}
-                  className={({ isActive }) => `block px-6 py-3 transition-all duration-300 ${
+                  className={({ isActive }) => `block px-4 sm:px-6 py-3 transition-all duration-300 text-sm sm:text-base ${
                     isActive 
                       ? isScrolled 
                         ? "bg-blue-600 text-white" 
@@ -397,7 +485,7 @@ const Navbar = () => {
                 <NavLink 
                   to="/allpak" 
                   onClick={() => setIsOpen(false)}
-                  className={({ isActive }) => `block px-6 py-3 transition-all duration-300 ${
+                  className={({ isActive }) => `block px-4 sm:px-6 py-3 transition-all duration-300 text-sm sm:text-base ${
                     isActive 
                       ? isScrolled 
                         ? "bg-blue-600 text-white" 
@@ -410,29 +498,49 @@ const Navbar = () => {
                   All Packages
                 </NavLink>
               </li>
-              <li>
-                <NavLink 
-                  to="/add-pak" 
-                  onClick={() => setIsOpen(false)}
-                  className={({ isActive }) => `block px-6 py-3 transition-all duration-300 ${
-                    isActive 
-                      ? isScrolled 
-                        ? "bg-blue-600 text-white" 
-                        : "bg-purple-600 text-white"
-                      : isScrolled
-                        ? "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        : "text-white hover:bg-white/20"
-                  }`}
-                >
-               Add Package
-                </NavLink>
-              </li>
-             
+              {user && (
+                <>
+                  <li>
+                    <NavLink 
+                      to="/add-pak" 
+                      onClick={() => setIsOpen(false)}
+                      className={({ isActive }) => `block px-4 sm:px-6 py-3 transition-all duration-300 text-sm sm:text-base ${
+                        isActive 
+                          ? isScrolled 
+                            ? "bg-blue-600 text-white" 
+                            : "bg-purple-600 text-white"
+                          : isScrolled
+                            ? "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            : "text-white hover:bg-white/20"
+                      }`}
+                    >
+                      Add Package
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink 
+                      to="/dashbord" 
+                      onClick={() => setIsOpen(false)}
+                      className={({ isActive }) => `block px-4 sm:px-6 py-3 transition-all duration-300 text-sm sm:text-base ${
+                        isActive 
+                          ? isScrolled 
+                            ? "bg-blue-600 text-white" 
+                            : "bg-purple-600 text-white"
+                          : isScrolled
+                            ? "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            : "text-white hover:bg-white/20"
+                      }`}
+                    >
+                      My Dashboard
+                    </NavLink>
+                  </li>
+                </>
+              )}
               <li>
                 <NavLink 
                   to="/Blog" 
                   onClick={() => setIsOpen(false)}
-                  className={({ isActive }) => `block px-6 py-3 transition-all duration-300 ${
+                  className={({ isActive }) => `block px-4 sm:px-6 py-3 transition-all duration-300 text-sm sm:text-base ${
                     isActive 
                       ? isScrolled 
                         ? "bg-blue-600 text-white" 
@@ -445,7 +553,6 @@ const Navbar = () => {
                   About
                 </NavLink>
               </li>
-              
             </ul>
           </div>
         </div>

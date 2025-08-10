@@ -64,13 +64,7 @@ const Home = () => {
       <MyMarquee />
       
         <AwardsBadges/>
-        {/* <br />
-        <br />
-        <br />
-        <ExpediaAppSection/>
-        <br />
-        <br />
-        <br /> */}
+       
     </div>
   );
 };
