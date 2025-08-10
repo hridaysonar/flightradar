@@ -12,12 +12,12 @@ const ProfileSidebar = ({ user, logOut }) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { id: 'profiles', icon: "👥", text: "See all profiles", isButton: true, className: "bg-gray-200 text-center font-medium py-2" },
-    { id: 'mycreate', icon: "📦", text: "My Create", action: '/myCreate' },
+    // { id: 'profiles', icon: "👥", text: "See all profiles", isButton: true, className: "bg-gray-200 text-center font-medium py-2" },
+    // { id: 'mycreate', icon: "📦", text: "My Create", action: '/myCreate' },
   
     
    
-     { id: 'mybookings', icon: "📅", text: "My Bookings",  },
+    //  { id: 'mybookings', icon: "📅", text: "My Bookings",  },
     { id: 'logout', icon: "📤", text: "Log out" }
   ];
 
